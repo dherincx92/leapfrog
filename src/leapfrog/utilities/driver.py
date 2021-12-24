@@ -22,7 +22,7 @@ class Driver:
         self,
         url: str,
         executable_path: str = None
-    ):
+    ) -> "Driver":
         self.url = url
         self.executable_path=executable_path
         if not executable_path:
@@ -33,7 +33,7 @@ class Driver:
         return self.html_source()
 
     @staticmethod
-    def find_webdriver_path(driver='geckodriver'):
+    def find_webdriver_path(driver: str = 'geckodriver') -> str:
         """
         Some os magic to get executable path.
 
@@ -48,8 +48,8 @@ class Driver:
                 exec_path = f'{path}/{driver}'
         return exec_path
 
-    def html_source(self):
-        """Retrieves a HTML page source"""
+    def html_source(self) -> str:
+        """Retrieves a HTML page source as a string"""
         with webdriver.Firefox(
             executable_path=self.executable_path
         ) as driver:
