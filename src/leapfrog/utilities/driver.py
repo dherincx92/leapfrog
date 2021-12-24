@@ -28,8 +28,12 @@ class Driver:
         if not executable_path:
             self.executable_path = self.find_webdriver_path()
 
+    def __call__(self):
+        """Shortcut to HTML source method"""
+        return self.html_source()
+
     @staticmethod
-    def find_webdriver_path():
+    def find_webdriver_path(driver='geckodriver'):
         """
         Some os magic to get executable path.
 
@@ -37,13 +41,13 @@ class Driver:
         a None value in the `executable_path` param when opening
         a context manager webdriver
         """
+
         os_paths = os.environ['PATH'].split(":")
         for path in os_paths:
-            if 'geckodriver' in os.listdir(path):
-                exec_path = path
+            if driver in os.listdir(path):
+                exec_path = f'{path}/{driver}'
         return exec_path
 
-    @property
     def html_source(self):
         """Retrieves a HTML page source"""
         with webdriver.Firefox(
