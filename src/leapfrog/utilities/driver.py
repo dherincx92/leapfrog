@@ -10,7 +10,8 @@ from selenium import webdriver
 
 class Driver:
     """
-    A selenium driver class retrieving a webpage's HTML code
+    A selenium Firefox, driver class retrieving a
+    webpage's HTML code
 
     Args:
         url: str
@@ -30,7 +31,7 @@ class Driver:
 
     def __call__(self):
         """Shortcut to HTML source method"""
-        return self.html_source()
+        return self.open_driver()
 
     @staticmethod
     def find_webdriver_path(driver: str = 'geckodriver') -> str:
@@ -48,11 +49,10 @@ class Driver:
                 exec_path = f'{path}/{driver}'
         return exec_path
 
-    def html_source(self) -> str:
-        """Retrieves a HTML page source as a string"""
-        with webdriver.Firefox(
+    def open_driver(self) -> "driver.Driver":
+        """Returns a driver, ready to retrieve content"""
+        driver = webdriver.Firefox(
             executable_path=self.executable_path
-        ) as driver:
-            driver.get(self.url)
-            html = driver.page_source
-        return html
+        )
+        driver.get(self.url)
+        return driver
