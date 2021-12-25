@@ -1,7 +1,7 @@
 '''
 Scraper for https://www.hospitalsafetygrade.org/
 
-# TODO: add validation to ensure driver is closed
+# TODO: configure slug to create href?
 
 author(s): Derek Herincx, derek663@gmail.com
 last_updated: 12/24/2021
@@ -27,7 +27,7 @@ class LeapfrogScraper(Driver):
         class_name: str
             Classs name of HTML elements containing relevant data
         timeout: int
-            Number of seconds before driver times out
+            Number of seconds before driver times out when opening webpage
     """
     def __init__(self, pagination=False, **kwargs):
         self.pagination = False
@@ -59,14 +59,18 @@ class LeapfrogScraper(Driver):
                 EC.presence_of_element_located(css_selector)
             )
 
-            tags = driver.find_elements_by_class_name(self.class_name)
+            # selenium 4.1.0 --> find_elements_by_* now deprecated
+            tags = driver.find_elements(By.CLASS_NAME, self.class_name)
 
             data = []
             for tag in tags:
                 # note: return statement ensures data is returned to Python env.
                 metadata = driver.execute_script("return arguments[0].dataset", tag)
-                data.append(metadata)
 
+                address = tag.find_element(By.CLASS_NAME, "address") \
+                        .get_attribute("innerText")
+                metadata['address'] = address
+                data.append(metadata)
             return data
         finally:
             driver.close()
