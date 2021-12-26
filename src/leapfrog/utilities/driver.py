@@ -10,21 +10,24 @@ from selenium import webdriver
 
 class Driver:
     """
-    A selenium Firefox, driver class retrieving a
-    webpage's HTML code
+    A Firefox, selenium driver
 
     Args:
         url: str
             Webpage to scrape
+        headless: bool
+            Should selenium run in headless mode?
         executable_path: str
             Path to browser webdriver, if not in PATH
     """
     def __init__(
         self,
         url: str,
+        headless: bool = False, # change when deployed in production
         executable_path: str = None
     ) -> "Driver":
         self.url = url
+        self.headless = headless
         self.executable_path=executable_path
         if not executable_path:
             self.executable_path = self.find_webdriver_path()
