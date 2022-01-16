@@ -15,7 +15,9 @@ class URL:
             A URL domain. This includes everything before the query string
             operator, inclusive of the operator itself
         query_dct: dict
-            A dictionary containing the domain's query parameters.
+            A dictionary containing the domain's query parameters
+        keys_to_exlude: list
+            A list of keys to be excluded from being included in the final URL
     """
     def __init__(
         self,
