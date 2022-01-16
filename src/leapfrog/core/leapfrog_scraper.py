@@ -1,7 +1,7 @@
 '''
 Scraper for https://www.hospitalsafetygrade.org/
 
-# TODO: configure slug to create href?
+TODO: configure slug to create href?
 
 author(s): Derek Herincx, derek663@gmail.com
 last_updated: 12/24/2021
@@ -12,11 +12,10 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
-from utilities import CustomDriver
+from leapfrog.utilities import CustomDriver
 
 class LeapfrogScraper(CustomDriver):
-    """
-    Scraper for  https://www.hospitalsafetygrade.org
+    """Selenium scraper for  https://www.hospitalsafetygrade.org
 
     Args:
         pagination: bool
@@ -26,21 +25,30 @@ class LeapfrogScraper(CustomDriver):
         timeout: int
             Number of seconds before driver times out when opening webpage
     """
-    def __init__(self, pagination: bool=False, **kwargs) -> "LeapfrogScraper":
+    def __init__(
+        self,
+        pagination: bool=False,
+        *args,
+        **kwargs
+    ) -> "LeapfrogScraper":
         self.pagination = False
         self.class_name = "leapfrogSearchResult"
         self.timeout = 20 # seconds
-        super().__init__(**kwargs)
+        super().__init__(*args, **kwargs)
 
     @property
     def driver(self):
         """Driver, inherited from utils Driver class"""
-        return Driver(self.url)()
+        return CustomDriver(self.url)()
 
-    def get_hospital_metadata(self) -> List[Dict[str, str]]:
+    def get_hospital_metadata(self, test=True) -> List[Dict[str, str]]:
         """
         Hospitals metadata, structured appropriately for easy export as
         JSON or into a csv, whatever user needs
+
+        Args:
+            test: bool
+                Do we want to return a single review?
 
         Returns
             data: list
@@ -57,7 +65,12 @@ class LeapfrogScraper(CustomDriver):
             )
 
             # selenium 4.1.0 --> find_elements_by_* now deprecated
-            tags = driver.find_elements(By.CLASS_NAME, self.class_name)
+            params = (By.CLASS_NAME, self.class_name)
+            if test:
+                # single tag returned; mainly to test
+                tags = list(driver.find_element(*params))
+            else:
+                tags = driver.find_elements(*params)
 
             data = []
             for tag in tags:

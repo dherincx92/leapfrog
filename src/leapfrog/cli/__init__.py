@@ -8,6 +8,5 @@ def cli():
     The Leapfrog CLI for managing scraping activities at
     https://www.hospitalsafetygrade.org/
     """
-    pass
 
 cli.add_command(_scrape)

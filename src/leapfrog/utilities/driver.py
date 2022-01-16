@@ -1,5 +1,5 @@
 '''
-Selenium webdriver class for scraping URLs
+Firefox, selenium webdriver class for scraping URLs
 
 author(s): Derek Herincx, derek663@gmail.com
 last_updated: 12/23/2021
@@ -8,9 +8,11 @@ import os
 
 from selenium import webdriver
 
-class Driver:
+class CustomDriver:
     """
-    A Firefox, selenium driver
+    A Firefox, selenium driver. Note, current implementation only supports
+    Firefox, so this module requires the geckodriver executable. Make sure
+    geckodriver is placed in any locations specified in your PATH
 
     Args:
         url: str
@@ -25,7 +27,7 @@ class Driver:
         url: str,
         headless: bool = False, # change when deployed in production
         executable_path: str = None
-    ) -> "Driver":
+    ) -> "CustomDriver":
         self.url = url
         self.headless = headless
         self.executable_path=executable_path
@@ -52,7 +54,7 @@ class Driver:
                 exec_path = f'{path}/{driver}'
         return exec_path
 
-    def open_driver(self) -> "driver.Driver":
+    def open_driver(self) -> "driver.CustomDriver":
         """Returns a driver, ready to retrieve content"""
         driver = webdriver.Firefox(
             executable_path=self.executable_path
