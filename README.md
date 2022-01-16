@@ -1,5 +1,17 @@
 # leapfrog
-A simple CLI interface scraping reviews from `https://www.hospitalsafetygrade.org/`
+A simple CLI interface hospital grades from `https://www.hospitalsafetygrade.org/`
+
+### Development
+
+If you wish to develop or improve this repository, use the following workflow:
+
+```
+$ git clone https://github.com/dherincx92/leapfrog.git
+$ cd leapfrog
+$ python3 -m venv venv
+$ source venv/bin/activate
+$ (venv) pip install -e .
+```
 
 
 ### Data Format
