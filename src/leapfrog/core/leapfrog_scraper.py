@@ -12,12 +12,9 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
-from utilities import Driver
+from utilities import CustomDriver
 
-# this is for easy testing
-URL = "https://www.hospitalsafetygrade.org/search?findBy=state&zip_code=&city=&state_prov=AZ&hospital="
-
-class LeapfrogScraper(Driver):
+class LeapfrogScraper(CustomDriver):
     """
     Scraper for  https://www.hospitalsafetygrade.org
 
@@ -29,7 +26,7 @@ class LeapfrogScraper(Driver):
         timeout: int
             Number of seconds before driver times out when opening webpage
     """
-    def __init__(self, pagination=False, **kwargs):
+    def __init__(self, pagination: bool=False, **kwargs) -> "LeapfrogScraper":
         self.pagination = False
         self.class_name = "leapfrogSearchResult"
         self.timeout = 20 # seconds
