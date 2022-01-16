@@ -71,8 +71,8 @@ def scrape(ctx, findBy, test, city, zip_code, state, hospital):
 
     \b
     Usage:
-        $ leapfrog scrape [FINDBY] [-r, --NUM_REVIEWS] [-c, --CITY]
-            [-z, --ZIP_CODE] [-s, --STATE] [-h, --HOSPITAL]
+        $ leapfrog scrape [FINDBY] [-t, --TEST] [-r, --NUM_REVIEWS]
+            [-c, --CITY] [-z, --ZIP_CODE] [-s, --STATE] [-h, --HOSPITAL]
 
     \b
     Positional Argument(s):
@@ -81,7 +81,7 @@ def scrape(ctx, findBy, test, city, zip_code, state, hospital):
 
     \b
     Named Arguments:
-        -t, --test-mode     Engage test mode, which returns only 1 review
+        -t, --test          Engage test mode, which returns only 1 review
         Provide the string `all` for all reviews in webpage
         -c, --city          City name
         -z, --zip           5-digit zipcode
@@ -90,8 +90,8 @@ def scrape(ctx, findBy, test, city, zip_code, state, hospital):
 
     \b
     Examples:
-        $ leapfrog scrape -n 10 state CA
-            Gets the first 10 reviews from the state of California
+        $ leapfrog scrape -t True state CA
+            Gets the first review from the state of California
     """
     # `click` provides a :class:`Context` class that aggregates all the
     # values from all arguments/options in a :type:`dict`, hence we don't
