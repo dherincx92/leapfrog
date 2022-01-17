@@ -13,6 +13,18 @@ $ source venv/bin/activate
 $ (venv) pip install -e .
 ```
 
+### Usage
+This simple, yet dynamic interface allows users to scrape reviews from Leapfrog by using the `scrape` command. Users can indicate whether they want scraping results by city, zip code, hospital name, or state. For supporting documentation on the `scrape` command, run `leapfrog scrape --help`. Examples:
+
+```
+# scraping reviews for the zip code: 90280
+$ leapfrog scrape zip -z 90280 -o {file-path-for-output}
+
+# returning a single review from the state of CA (-t used for testing results and will only return 1 review)
+$ leapfrog scrape state -s CA -o {file-path-for-output} -t True
+
+```
+
 
 ### Data Format
 
