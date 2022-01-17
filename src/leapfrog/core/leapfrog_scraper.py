@@ -68,7 +68,7 @@ class LeapfrogScraper(CustomDriver):
             params = (By.CLASS_NAME, self.class_name)
             if test:
                 # single tag returned; mainly to test
-                tags = list(driver.find_element(*params))
+                tags = [driver.find_element(*params)]
             else:
                 tags = driver.find_elements(*params)
 

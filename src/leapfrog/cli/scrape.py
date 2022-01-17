@@ -5,20 +5,21 @@ author(s): Derek Herincx, derek663@gmail.com
 last_updated: 01/15/2022
 '''
 from functools import wraps
+import json
 import os
 
 import click
-from click import Argument, Choice
+from click import Argument, Choice, File, Path, UsageError
 
 from leapfrog import LeapfrogScraper
 from leapfrog.utilities import URL
 
 # sys.tracebacklimit = 0
-VALID_FINDBY_CHOICES = ['city', 'zip', 'hospital', 'state']
+VALID_FINDBY_CHOICES = ['city', 'zip_code', 'hospital', 'state']
 # keys that we use within the CLI, but not needed for the URL creation
 # including additional keys doesn't cause the script to fail, but don't
 # want to confuse end users about their presence
-KEYS_TO_EXCLUDE = ['num_reviews']
+KEYS_TO_EXCLUDE = ['num_reviews', 'output', 'test']
 DOMAIN = 'https://www.hospitalsafetygrade.org/search?'
 
 def name_casing(func):
@@ -59,13 +60,14 @@ class ArgumentWithCasing(Argument):
     cls=ArgumentWithCasing,
     preserve_casing=True
 )
+@click.argument('output', type=Path(exists=False))
 @click.option("-t", "--test", required=False, default=False, type=bool)
 @click.option("-c", "--city", required=False)
 @click.option("-z", "--zip_code", required=False)
 @click.option("-s", "--state", required=False)
 @click.option("-h", "--hospital", required=False)
 @click.pass_context
-def scrape(ctx, findBy, test, city, zip_code, state, hospital):
+def scrape(ctx, findBy, output, test, city, zip_code, state, hospital):
     """
     Scrape command indicating the level of scraping to perform
 
@@ -84,7 +86,7 @@ def scrape(ctx, findBy, test, city, zip_code, state, hospital):
         -t, --test          Engage test mode, which returns only 1 review
         Provide the string `all` for all reviews in webpage
         -c, --city          City name
-        -z, --zip           5-digit zipcode
+        -z, --zip_code      5-digit zipcode
         -s, --state         Two-letter U.S. state identifier
         -h, --hospital      Hospital name
 
@@ -97,10 +99,16 @@ def scrape(ctx, findBy, test, city, zip_code, state, hospital):
     # values from all arguments/options in a :type:`dict`, hence we don't
     # need to individually work with parameters from :meth:`scrape`
     params = ctx.params
+    if not params[findBy]:
+        raise UsageError(f"Option --{findBy} is required")
+
     parametrized_url = URL(DOMAIN, params, KEYS_TO_EXCLUDE)()
 
     scraper = LeapfrogScraper(url=parametrized_url)
     # scraper is configured to only return one review by default
-    data = scraper.get_hospital_metadata(test)
+    reviews = scraper.get_hospital_metadata(test)
 
-    # TODO: create final dumping of file
+    with open(output, 'w') as outfile:
+        json.dump(reviews, outfile)
+
+    click.echo(f"Wrote data to {output} successfully!")
