@@ -9,7 +9,7 @@ import json
 import os
 
 import click
-from click import Argument, Choice, File, Path, UsageError
+from click import Argument, Choice, Path, UsageError
 
 from leapfrog import LeapfrogScraper
 from leapfrog.utilities import URL
@@ -79,12 +79,11 @@ def scrape(ctx, findBy, output, test, city, zip_code, state, hospital):
     \b
     Positional Argument(s):
         FINDBY  Type of scrape to perform
-        Possible Choices: city, zip, hospital, state
+        Possible Choices: city, zip_code, hospital, state
 
     \b
     Named Arguments:
         -t, --test          Engage test mode, which returns only 1 review
-        Provide the string `all` for all reviews in webpage
         -c, --city          City name
         -z, --zip_code      5-digit zipcode
         -s, --state         Two-letter U.S. state identifier
@@ -103,9 +102,7 @@ def scrape(ctx, findBy, output, test, city, zip_code, state, hospital):
         raise UsageError(f"Option --{findBy} is required")
 
     parametrized_url = URL(DOMAIN, params, KEYS_TO_EXCLUDE)()
-
     scraper = LeapfrogScraper(url=parametrized_url)
-    # scraper is configured to only return one review by default
     reviews = scraper.get_hospital_metadata(test)
 
     with open(output, 'w') as outfile:
