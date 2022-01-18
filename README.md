@@ -1,6 +1,8 @@
 # leapfrog
 A simple CLI interface hospital grades from `https://www.hospitalsafetygrade.org/`
 
+As of 01/17/2022, this repo is still being worked on. The CLI interface works, but still working on adding tests and potentially cleaning up arguments, etc.
+
 ### Development
 
 If you wish to develop or improve this repository, use the following workflow:
